@@ -138,7 +138,31 @@ public class TextBuddy {
 	}
 
 	private static void sort() {
-		// TODO Auto-generated method stub
+		TreeSet<String> lines = new TreeSet<String>();
+		
+		openBufferedReader();
+		String line = readLineFromFile();
+		boolean fileEmpty = (line == null);
+
+		if (fileEmpty) {
+			showToUser(MESSAGE_EMPTY_FILE, fileName);
+		} else {
+			
+			lines.add(line);
+			while((line = readLineFromFile()) != null) {
+				lines.add(line);
+			}
+			file.delete();
+			openPrintWriter(false);
+			while(!lines.isEmpty()) {
+				pw.println(lines.pollFirst());
+			}
+			closePrintWriter();
+			showToUser("Sorted\n");
+			
+			
+		}
+		closeBufferedReader();
 		
 	}
 
