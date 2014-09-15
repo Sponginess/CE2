@@ -46,14 +46,16 @@ public class TextBuddy {
 	private static final String MESSAGE_SUCCESSFULLY_ADDED = "added to %s: \"%s\"\n";
 	private static final String MESSAGE_SUCCESSFULLY_CLEARED = "all content deleted from %s\n";
 	private static final String MESSAGE_SUCESSFULLY_DELETED = "deleted from %s: \"%s\"\n";
-	private static final String MESSAGE_UNSUCCESSFUL_DELETE = "error: unable to delete, no such line\n";
+	private static final String MESSAGE_UNSUCCESSFUL_DELETE = "Error: unable to delete, no such line\n";
 	private static final String MESSAGE_EMPTY_FILE = "%s is empty\n";
 	private static final String MESSAGE_OUTPUT = "%d. %s\n";
-	private static final String MESSAGE_FILE_NAME_PROMPT = "error: please enter a file name: ";
+	private static final String MESSAGE_CONTAINS = "The following lines contain the keyword \"%s\":\n";
+	private static final String MESSAGE_NONE = "None\n";
+	private static final String MESSAGE_FILE_NAME_PROMPT = "Error: please enter a file name: ";
 	private static final String COMMAND_PROMPT = "command: ";
-	private static final String ERROR_MESSAGE_INVALID_COMMAND = "error: invalid command\n";
-	private static final String ERROR_MESSAGE_FILE = "error: file error\n";
-	private static final String ERROR_MESSAGE_NOT_A_NUMBER = "error: unable to delete, not a number\n";
+	private static final String ERROR_MESSAGE_INVALID_COMMAND = "Error: invalid command\n";
+	private static final String ERROR_MESSAGE_FILE = "Error: file error\n";
+	private static final String ERROR_MESSAGE_NOT_A_NUMBER = "Error: unable to delete, not a number\n";
 	private static final String TEMP_FILE_NAME_TEMPLATE = "%s.tmp";
 	
 	private static final String COMMAND_ADD = "add";
@@ -115,6 +117,12 @@ public class TextBuddy {
 			case COMMAND_DELETE:
 				deleteLineFromFile();
 				break;
+			case "search":
+				search();
+				break;
+			case "sort":
+				sort();
+				break;
 			case COMMAND_DISPLAY:
 				displayFileContent();
 				break;
@@ -127,6 +135,40 @@ public class TextBuddy {
 				showToUser(ERROR_MESSAGE_INVALID_COMMAND);
 			}
 		return true;
+	}
+
+	private static void sort() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void search() {
+		String keyword = scanner.next();
+		openBufferedReader();
+		String line = readLineFromFile();
+		int lineNumber = 1;
+		boolean fileEmpty = (line == null);
+		boolean containsKeyword = false;
+
+		if (fileEmpty) {
+			showToUser(MESSAGE_EMPTY_FILE, fileName);
+		} else {
+			showToUser(MESSAGE_CONTAINS, keyword);
+			if(Arrays.asList(line.split(" ")).contains(keyword)) {
+				containsKeyword = true;
+				showToUser(MESSAGE_OUTPUT, lineNumber, line);
+			}
+			for (lineNumber = 2; (line = readLineFromFile()) != null; lineNumber++) {
+				if(Arrays.asList(line.split(" ")).contains(keyword)) {
+					containsKeyword = true;
+					showToUser(MESSAGE_OUTPUT, lineNumber, line);
+				}
+			}
+			if(!containsKeyword) {
+				showToUser(MESSAGE_NONE);
+			}
+		}
+		closeBufferedReader();
 	}
 
 	// Command Methods
