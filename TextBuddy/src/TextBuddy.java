@@ -42,14 +42,12 @@ import java.io.*;
 import java.util.*;
 
 public class TextBuddy {
-	private static final String MESSAGE_SORTED = "Sorted\n";
-	private static final String COMMAND_SORT = "sort";
-	private static final String COMMAND_SEARCH = "search";
 	private static final String MESSAGE_WELCOME = "Welcome to TextBuddy. %s is ready for use\n";
 	private static final String MESSAGE_SUCCESSFULLY_ADDED = "added to %s: \"%s\"\n";
 	private static final String MESSAGE_SUCCESSFULLY_CLEARED = "all content deleted from %s\n";
 	private static final String MESSAGE_SUCESSFULLY_DELETED = "deleted from %s: \"%s\"\n";
 	private static final String MESSAGE_UNSUCCESSFUL_DELETE = "Error: unable to delete, no such line\n";
+	private static final String MESSAGE_SORTED = "Sorted\n";
 	private static final String MESSAGE_EMPTY_FILE = "%s is empty\n";
 	private static final String MESSAGE_OUTPUT = "%d. %s\n";
 	private static final String MESSAGE_CONTAINS = "The following lines contain the keyword \"%s\":\n";
@@ -63,6 +61,8 @@ public class TextBuddy {
 	
 	private static final String COMMAND_ADD = "add";
 	private static final String COMMAND_DELETE = "delete";
+	private static final String COMMAND_SEARCH = "search";
+	private static final String COMMAND_SORT = "sort";
 	private static final String COMMAND_DISPLAY = "display";
 	private static final String COMMAND_CLEAR = "clear";
 	private static final String COMMAND_EXIT = "exit";
