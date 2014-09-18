@@ -1,0 +1,38 @@
+import static org.junit.Assert.*;
+import java.io.*;
+
+import org.junit.Test;
+
+
+public class SortTest {
+	//Checks if sort function works
+	@Test
+	public void testSortFunction() {
+		TextBuddy.fileName = "tempTestFile.txt";
+		TextBuddy.initialiseFile();
+		try {
+			PrintWriter pw = new PrintWriter(new FileWriter(TextBuddy.file));
+			pw.println("This is a line");
+			pw.println("More lines");
+			pw.println("Another line");
+			pw.println("Lines lines lines");
+			TextBuddy.executeCommand("sort");
+			pw.close();
+			BufferedReader br = new BufferedReader(new FileReader(TextBuddy.file));
+			String line;
+			line = br.readLine();
+			assertEquals(line, "Another line");
+			line = br.readLine();
+			assertEquals(line, "Lines lines lines");
+			line = br.readLine();
+			assertEquals(line, "More lines");
+			line = br.readLine();
+			assertEquals(line, "This is a line");
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+}

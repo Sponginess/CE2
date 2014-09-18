@@ -29,8 +29,10 @@ public class SortTest {
 			assertEquals("More lines", line);
 			line = br.readLine();
 			assertEquals("This is a line", line);
-			TextBuddy.file.delete();
+			line = br.readLine();
+			assertEquals(null, line);
 			br.close();
+			TextBuddy.file.delete();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

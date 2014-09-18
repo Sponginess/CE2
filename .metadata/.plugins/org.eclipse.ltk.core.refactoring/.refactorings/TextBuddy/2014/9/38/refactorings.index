@@ -1,0 +1,9 @@
+1410786432646	Delete element
+1411049985866	Extract constant 'COMMAND_SEARCH'
+1411050006680	Extract constant 'COMMAND_SORT'
+1411050358911	Extract constant 'MESSAGE_SORTED'
+1411050826199	Extract method 'sortFileWithBST'
+1411050896085	Extract method 'rewriteFile'
+1411051893005	Move method
+1411051905676	Move method
+1411051909441	Move method
