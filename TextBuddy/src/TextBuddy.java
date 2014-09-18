@@ -42,6 +42,9 @@ import java.io.*;
 import java.util.*;
 
 public class TextBuddy {
+	private static final String MESSAGE_SORTED = "Sorted\n";
+	private static final String COMMAND_SORT = "sort";
+	private static final String COMMAND_SEARCH = "search";
 	private static final String MESSAGE_WELCOME = "Welcome to TextBuddy. %s is ready for use\n";
 	private static final String MESSAGE_SUCCESSFULLY_ADDED = "added to %s: \"%s\"\n";
 	private static final String MESSAGE_SUCCESSFULLY_CLEARED = "all content deleted from %s\n";
@@ -77,7 +80,7 @@ public class TextBuddy {
 
 	}
 
-	private static void getFileName(String[] args) {
+	public static void getFileName(String[] args) {
 		if (args.length == 0) {
 			showToUser(MESSAGE_FILE_NAME_PROMPT);
 			fileName = scanner.next();
@@ -86,7 +89,7 @@ public class TextBuddy {
 		}
 	}
 
-	private static void initialiseFile() {
+	public static void initialiseFile() {
 		file = new File(fileName);
 		if (!file.exists()) {
 			createEmptyFile();
@@ -94,7 +97,7 @@ public class TextBuddy {
 		showToUser(MESSAGE_WELCOME, fileName);
 	}
 
-	private static void operateTextBuddy() {
+	public static void operateTextBuddy() {
 		String command;
 		boolean inOperation = true;
 
@@ -105,11 +108,11 @@ public class TextBuddy {
 		}
 	}
 
-	private static String getCommand() {
+	public static String getCommand() {
 		return scanner.next();
 	}
 
-	private static boolean executeCommand(String command) {
+	public static boolean executeCommand(String command) {
 		switch (command.toLowerCase()) {
 			case COMMAND_ADD:
 				addLineToFile();
@@ -117,10 +120,10 @@ public class TextBuddy {
 			case COMMAND_DELETE:
 				deleteLineFromFile();
 				break;
-			case "search":
+			case COMMAND_SEARCH:
 				search();
 				break;
-			case "sort":
+			case COMMAND_SORT:
 				sort();
 				break;
 			case COMMAND_DISPLAY:
@@ -137,9 +140,8 @@ public class TextBuddy {
 		return true;
 	}
 
-	private static void sort() {
+	public static void sort() {
 		TreeSet<String> lines = new TreeSet<String>();
-		
 		openBufferedReader();
 		String line = readLineFromFile();
 		boolean fileEmpty = (line == null);
@@ -147,26 +149,31 @@ public class TextBuddy {
 		if (fileEmpty) {
 			showToUser(MESSAGE_EMPTY_FILE, fileName);
 		} else {
-			
-			lines.add(line);
-			while((line = readLineFromFile()) != null) {
-				lines.add(line);
-			}
-			file.delete();
-			openPrintWriter(false);
-			while(!lines.isEmpty()) {
-				pw.println(lines.pollFirst());
-			}
-			closePrintWriter();
-			showToUser("Sorted\n");
-			
-			
+			sortFileWithBST(lines, line);
+			rewriteFile(lines);
+			showToUser(MESSAGE_SORTED);		
 		}
 		closeBufferedReader();
 		
 	}
 
-	private static void search() {
+	public static void rewriteFile(TreeSet<String> lines) {
+		file.delete();
+		openPrintWriter(false);
+		while(!lines.isEmpty()) {
+			pw.println(lines.pollFirst());
+		}
+		closePrintWriter();
+	}
+
+	public static void sortFileWithBST(TreeSet<String> lines, String line) {
+		lines.add(line);
+		while((line = readLineFromFile()) != null) {
+			lines.add(line);
+		}
+	}
+
+	public static void search() {
 		String keyword = scanner.next();
 		openBufferedReader();
 		String line = readLineFromFile();
@@ -197,7 +204,7 @@ public class TextBuddy {
 
 	// Command Methods
 
-	private static void addLineToFile() {
+	public static void addLineToFile() {
 		openPrintWriter(true);
 		String line = scanner.nextLine().trim();
 		printToFile(line);
@@ -205,7 +212,7 @@ public class TextBuddy {
 		showToUser(MESSAGE_SUCCESSFULLY_ADDED, fileName, line);
 	}
 
-	private static void deleteLineFromFile() {
+	public static void deleteLineFromFile() {
 		int lineNumber;
 		try {
 			lineNumber = scanner.nextInt();
@@ -228,20 +235,20 @@ public class TextBuddy {
 
 	}
 
-	private static void displayFileContent() {
+	public static void displayFileContent() {
 		openBufferedReader();
 		readFileAndOutputFileContent();
 		closeBufferedReader();
 
 	}
 
-	private static void clearFileContent() {
+	public static void clearFileContent() {
 		createEmptyFile();
 		showToUser(MESSAGE_SUCCESSFULLY_CLEARED, fileName);
 	}
 
 	// Helper Methods
-	private static void overwriteOriginalFileWithTempFile(String fileNameTemp) {
+	public static void overwriteOriginalFileWithTempFile(String fileNameTemp) {
 		try {
 			BufferedReader brt = new BufferedReader(
 					new FileReader(fileNameTemp));
@@ -257,7 +264,7 @@ public class TextBuddy {
 		}
 	}
 
-	private static boolean extractUndeletedLinesToTempFile(int lineNumber,
+	public static boolean extractUndeletedLinesToTempFile(int lineNumber,
 			String fileNameTemp) {
 		try {
 			String line;
@@ -282,7 +289,7 @@ public class TextBuddy {
 		}
 	}
 
-	private static void readFileAndOutputFileContent() { // Prereq: Buffered
+	public static void readFileAndOutputFileContent() { // Prereq: Buffered
 														// reader must be open
 		String line = readLineFromFile();
 		int lineNumber = 1;
@@ -299,7 +306,7 @@ public class TextBuddy {
 	}
 
 	// Writer and Reader Methods
-	private static void openPrintWriter(boolean forAppending) {
+	public static void openPrintWriter(boolean forAppending) {
 		try {
 			if (forAppending) {
 				pw = new PrintWriter(new FileWriter(file, true));
@@ -311,16 +318,16 @@ public class TextBuddy {
 		}
 	}
 
-	private static void closePrintWriter() {
+	public static void closePrintWriter() {
 		pw.close();
 
 	}
 
-	private static void printToFile(String line) {
+	public static void printToFile(String line) {
 		pw.println(line);
 	}
 
-	private static void openBufferedReader() {
+	public static void openBufferedReader() {
 		try {
 			br = new BufferedReader(new FileReader(file));
 		} catch (IOException e) {
@@ -328,7 +335,7 @@ public class TextBuddy {
 		}
 	}
 
-	private static void closeBufferedReader() {
+	public static void closeBufferedReader() {
 		try {
 			br.close();
 		} catch (IOException e) {
@@ -336,7 +343,7 @@ public class TextBuddy {
 		}
 	}
 
-	private static String readLineFromFile() {
+	public static String readLineFromFile() {
 		try {
 			String line = br.readLine();
 			return line;
@@ -346,7 +353,7 @@ public class TextBuddy {
 		return null;
 	}
 
-	private static void createEmptyFile() {
+	public static void createEmptyFile() {
 		try {
 			file.delete();
 			file.createNewFile();
@@ -357,11 +364,11 @@ public class TextBuddy {
 	}
 
 	// Output Methods
-	private static void showToUser(String message) {
+	public static void showToUser(String message) {
 		System.out.print(message);
 	}
 
-	private static void showToUser(String message, Object... args) {
+	public static void showToUser(String message, Object... args) {
 		System.out.print(String.format(message, args));
 	}
 
