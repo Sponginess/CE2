@@ -195,27 +195,12 @@ public class TextBuddy {
 		String keyword = scanner.next();
 		openBufferedReader();
 		String line = readLineFromFile();
-		int lineNumber = 1;
 		boolean fileEmpty = (line == null);
-		boolean containsKeyword = false;
-	
 		if (fileEmpty) {
 			showToUser(MESSAGE_EMPTY_FILE, fileName);
 		} else {
 			showToUser(MESSAGE_CONTAINS, keyword);
-			if(Arrays.asList(line.split(" ")).contains(keyword)) {
-				containsKeyword = true;
-				showToUser(MESSAGE_OUTPUT, lineNumber, line);
-			}
-			for (lineNumber = 2; (line = readLineFromFile()) != null; lineNumber++) {
-				if(Arrays.asList(line.split(" ")).contains(keyword)) {
-					containsKeyword = true;
-					showToUser(MESSAGE_OUTPUT, lineNumber, line);
-				}
-			}
-			if(!containsKeyword) {
-				showToUser(MESSAGE_NONE);
-			}
+			outputLinesWithKeyword(keyword, line);
 		}
 		closeBufferedReader();
 	}
@@ -304,6 +289,20 @@ public class TextBuddy {
 			for (lineNumber = 2; (line = readLineFromFile()) != null; lineNumber++) {
 				showToUser(MESSAGE_OUTPUT, lineNumber, line);
 			}
+		}
+	}
+
+	private static void outputLinesWithKeyword(String keyword, String line) {
+		boolean containsKeyword = false;
+		for (int lineNumber = 1; line != null; lineNumber++) {
+			if(Arrays.asList(line.split(" ")).contains(keyword)) {
+				containsKeyword = true;
+				showToUser(MESSAGE_OUTPUT, lineNumber, line);
+			}
+			line = readLineFromFile();
+		}
+		if(!containsKeyword) {
+			showToUser(MESSAGE_NONE);
 		}
 	}
 
