@@ -3,7 +3,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.io.*;
-
+import java.util.Scanner;
 public class SearchTest {
 	
 	@Test
@@ -19,7 +19,7 @@ public class SearchTest {
 			pw.println("Lines lines lines");
 			pw.close();
 			ByteArrayInputStream userInput = new ByteArrayInputStream("line".getBytes());
-			System.setIn(userInput);
+			TextBuddy.scanner = new Scanner(userInput);
 
 			ByteArrayOutputStream consoleOutput = new ByteArrayOutputStream();
 			System.setOut(new PrintStream(consoleOutput));
@@ -29,9 +29,10 @@ public class SearchTest {
 					+ "1. This is a line\n"
 					+ "3. Another line\n", consoleOutput.toString());
 			TextBuddy.file.delete();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		} 
 	}
 
 }
